@@ -58,7 +58,7 @@ Responsável por:
 ---
 
 ## Consumo Analítico
-A camada Gold alimenta dashboard construído em Looker Studio para exploração interativa dos indicadores.
+Para consumo no Looker Studio, a camada Gold foi exportada para CSV como camada de consumo do dashboard, por decisão arquitetural do projeto, priorizando simplicidade de integração e viabilidade da solução dentro do escopo definido.
 
 Fluxo completo:
 
@@ -95,7 +95,8 @@ projeto-etl-vendas/
 │
 ├── docs/
 │   └── img/
-│       └── dashboard_v1.png  # evidência visual do dashboard
+│       ├── dashboard_v1.png  # evidência visual do dashboard inicial
+│       └── dashboard_v2.png  # evidência visual do dashboard refinada
 │
 ├── logs/
 │   └── etl.log               # logs do pipeline
@@ -161,18 +162,21 @@ Análise de oportunidade por Brick, utilizada como proxy analítica de potencial
 
 # Dashboard Analítico
 
-Dashboard estruturado em narrativa executiva:
+O dashboard **Dashboard Analítico de Competitividade por Brick** foi estruturado em narrativa executiva, com foco em leitura rápida dos KPIs e identificação de oportunidades comerciais.
 
 ## Visão Geral
 - KPIs consolidados
 - leitura executiva dos indicadores
+- ajustes de precisão e formatação dos KPIs
 
 ## Oportunidade
 - análise de potencial por Brick
 - gaps competitivos
+- refinamentos de nomenclatura e legibilidade com `Brick_Label`
 
 ## Evolução
 - comportamento temporal dos indicadores
+- gráfico temporal em barras agrupadas comparando volume CLAMED vs Concorrente
 
 ### Filtros disponíveis
 - Período
@@ -181,9 +185,23 @@ Dashboard estruturado em narrativa executiva:
 
 ## Evidência Visual do Dashboard
 
-Visão consolidada do dashboard analítico desenvolvido:
+Versão final do dashboard (V2):
 
-![Dashboard Analítico](docs/img/dashboard_v1.png)
+![Dashboard Analítico](docs/img/dashboard_v2.png)
+
+Versão inicial registrada como histórico de evolução da entrega:
+
+- V1: `docs/img/dashboard_v1.png`
+
+### Evolução da V1 para V2
+A versão final incorporou refinamentos realizados após validações e testes de uso, com foco em clareza analítica e leitura executiva:
+
+- evolução do gráfico temporal para barras agrupadas comparativas (Clamed vs Concorrente)
+- melhorias de legibilidade via `Brick_Label`
+- ajustes de precisão e apresentação dos KPIs
+- refinamentos visuais para interpretação executiva do dashboard
+
+As alterações tiveram como objetivo melhorar interpretação dos indicadores sem alterar a lógica analítica implementada.
 
 ---
 
@@ -205,17 +223,33 @@ A solução entrega as seguintes capacidades:
 
 ## Integridade e qualidade
 Foram aplicadas verificações de:
+
 - consistência entre fontes
 - limpeza e padronização
 - integridade de relacionamentos
 - coerência dos agregados analíticos
 
+Sanity checks finais também validaram:
+
+- reconciliação entre dados Silver e Gold
+- consistência dos KPIs calculados
+- indicadores de market share dentro de faixas esperadas
+- ausência de inconsistências analíticas após refinamentos do dashboard
+- registros residuais de 2026 identificados como dados presentes na origem e tratados na camada de consumo
+
+Script de apoio às validações:
+
+`sql/sanity_check.sql`
+
 ## Decisões de modelagem
 Principais decisões:
+
 - uso de arquitetura Medallion simulada
 - PostgreSQL como camada persistente analítica
 - Gold modelada como view para consumo BI
 - modelagem orientada a indicadores de negócio
+
+Refinamentos finais preservaram a lógica analítica original, atuando apenas sobre apresentação, precisão e consumo dos indicadores.
 
 ---
 
@@ -231,7 +265,7 @@ Principais decisões:
 1. Clonar repositório
 
 ```bash
-git clone <repo_url>
+git clone https://github.com/felipeseixas-sesi/projeto-etl-vendas.git
 ```
 
 2. Instalar dependências
@@ -256,6 +290,7 @@ Possíveis evoluções:
 - automação de cargas incrementais
 - ampliação de monitoramento e observabilidade
 - expansão dos indicadores analíticos
-- evolução para ambiente cloud real
+- migração futura para arquitetura cloud nativa
+- análises complementares de share de valor versus share de volume
 
 ---
